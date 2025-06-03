@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS - Minimal Typographic Interpretation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 400;
+            line-height: 1.2;
+            color: #000;
+            background: #fff;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            display: grid;
+            grid-template-columns: 1fr 4fr;
+            gap: 80px;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            position: sticky;
+            top: 60px;
+            height: fit-content;
+            position: relative;
+            min-height: 200px;
+        }
+        
+        .title {
+            font-size: 72px;
+            font-weight: 300;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            color: #ff3333;
+            transform: rotate(-90deg);
+            transform-origin: left bottom;
+            position: absolute;
+            left: 0;
+            bottom: 50%;
+            white-space: nowrap;
+            height: fit-content;
+        }
+        
+        .subtitle {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #666;
+            margin-bottom: 40px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+        
+        .main-content {
+            display: grid;
+            gap: 100px;
+        }
+        
+        .verse {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 40px;
+            align-items: start;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .verse:nth-child(1) { animation-delay: 0.2s; }
+        .verse:nth-child(2) { animation-delay: 0.4s; }
+        .verse:nth-child(3) { animation-delay: 0.6s; }
+        .verse:nth-child(4) { animation-delay: 0.8s; }
+        .verse:nth-child(5) { animation-delay: 1.0s; }
+        .verse:nth-child(6) { animation-delay: 1.2s; }
+        
+        .verse-number {
+            font-size: 48px;
+            font-weight: 100;
+            color: #ccc;
+            line-height: 1;
+            position: sticky;
+            top: 60px;
+        }
+        
+        .verse-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px 20px;
+            align-items: center;
+            position: relative;
+        }
+        
+        .acronym {
+            font-size: 28px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 15px 0;
+            border-bottom: 1px solid transparent;
+            position: relative;
+        }
+        
+        .acronym:hover {
+            border-bottom-color: #000;
+            transform: translateY(-2px);
+        }
+        
+        .acronym.sos {
+            color: #ff3333;
+            font-weight: 700;
+            font-size: 28px;
+            position: relative;
+        }
+        
+
+        
+        .final-verse {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-top: 60px;
+            padding: 80px 0;
+            border-top: 1px solid #000;
+        }
+        
+        .final-sos {
+            display: inline-block;
+            font-size: 120px;
+            font-weight: 900;
+            color: #ff3333;
+            letter-spacing: 8px;
+            margin: 0 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .final-sos:nth-child(1) { animation-delay: 0s; }
+        .final-sos:nth-child(2) { animation-delay: 0.2s; }
+        .final-sos:nth-child(3) { animation-delay: 0.4s; }
+        .final-sos:nth-child(4) { animation-delay: 0.6s; }
+        
+        .meaning {
+            position: absolute;
+			top: 70px;
+            left: 0;
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0;
+			width: fit-content;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            max-width: 200px;
+            line-height: 1.3;
+        }
+        
+        .acronym:hover .meaning {
+            opacity: 1;
+        }
+        
+        .credit {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            font-size: 10px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(90deg);
+            transform-origin: right bottom;
+        }
+        
+        .verse-label {
+            position: absolute;
+            right: -60px;
+            top: 0;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #999;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+        
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1); 
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(0.95); 
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 40px 20px;
+            }
+            
+            .sidebar {
+                position: relative;
+                height: 120px;
+            }
+            
+            .title {
+                transform: none;
+                position: static;
+                font-size: 48px;
+                margin-bottom: 10px;
+            }
+            
+            .subtitle {
+                writing-mode: initial;
+                text-orientation: initial;
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .verse-content {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px 15px;
+            }
+            
+            .acronym {
+                font-size: 24px;
+            }
+            
+            .acronym.sos {
+                font-size: 30px;
+            }
+            
+            .final-sos {
+                font-size: 60px;
+                margin: 0 10px;
+                letter-spacing: 4px;
+            }
+            
+            .verse-number {
+                font-size: 32px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .verse-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .final-sos {
+                font-size: 48px;
+                display: block;
+                margin: 10px 0;
+            }
+            
+            .container {
+                padding: 20px 15px;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .container {
+                max-width: none;
+                margin: 0;
+                padding: 40px;
+            }
+            
+            .verse {
+                break-inside: avoid;
+                margin-bottom: 60px;
+            }
+            
+            .final-verse {
+                break-before: page;
+            }
+            
+            .acronym {
+                transition: none;
+            }
+            
+            .meaning {
+                opacity: 1;
+                position: static;
+                margin-top: 5px;
+                font-size: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="title">SOS</div>
+            <div class="subtitle">Rick Moranis / Tipografska Interpretacija</div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Strofa 1 -->
+            <div class="verse">
+                <div class="verse-number">01</div>
+                <div class="verse-content">
+                    <div class="verse-label">Državni nadzor</div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        CIA
+                        <div class="meaning">Central Intelligence Agency</div>
+                    </div>
+                    <div class="acronym">
+                        FBI
+                        <div class="meaning">Federal Bureau of Investigation</div>
+                    </div>
+                    <div class="acronym">
+                        NSA
+                        <div class="meaning">National Security Agency</div>
+                    </div>
+                    <div class="acronym">
+                        CBS
+                        <div class="meaning">Columbia Broadcasting System</div>
+                    </div>
+                    <div class="acronym">
+                        NBC
+                        <div class="meaning">National Broadcasting Company</div>
+                    </div>
+                    <div class="acronym">
+                        CNN
+                        <div class="meaning">Cable News Network</div>
+                    </div>
+                    <div class="acronym">
+                        ABC
+                        <div class="meaning">American Broadcasting Company</div>
+                    </div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        GNP
+                        <div class="meaning">Gross National Product</div>
+                    </div>
+                    <div class="acronym">
+                        CPI
+                        <div class="meaning">Consumer Price Index</div>
+                    </div>
+                    <div class="acronym">
+                        IMF
+                        <div class="meaning">International Monetary Fund</div>
+                    </div>
+                    <div class="acronym">
+                        GOP
+                        <div class="meaning">Grand Old Party (Republican)</div>
+                    </div>
+                    <div class="acronym">
+                        DNC
+                        <div class="meaning">Democratic National Committee</div>
+                    </div>
+                    <div class="acronym">
+                        CNN
+                        <div class="meaning">Cable News Network</div>
+                    </div>
+                    <div class="acronym">
+                        CNBC
+                        <div class="meaning">Consumer News Business Channel</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strofa 2 -->
+            <div class="verse">
+                <div class="verse-number">02</div>
+                <div class="verse-content">
+                    <div class="verse-label">Corporate & Emergency</div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        SEC
+                        <div class="meaning">Securities Exchange Commission</div>
+                    </div>
+                    <div class="acronym">
+                        CEO
+                        <div class="meaning">Chief Executive Officer</div>
+                    </div>
+                    <div class="acronym">
+                        IRS
+                        <div class="meaning">Internal Revenue Service</div>
+                    </div>
+                    <div class="acronym">
+                        CPR
+                        <div class="meaning">Cardiopulmonary Resuscitation</div>
+                    </div>
+                    <div class="acronym">
+                        ICU
+                        <div class="meaning">Intensive Care Unit</div>
+                    </div>
+                    <div class="acronym">
+                        RIP
+                        <div class="meaning">Rest In Peace</div>
+                    </div>
+                    <div class="acronym">
+                        FTD
+                        <div class="meaning">Frontotemporal Dementia</div>
+                    </div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        NFL
+                        <div class="meaning">National Football League</div>
+                    </div>
+                    <div class="acronym">
+                        MVP
+                        <div class="meaning">Most Valuable Player</div>
+                    </div>
+                    <div class="acronym">
+                        SUV
+                        <div class="meaning">Sport Utility Vehicle</div>
+                    </div>
+                    <div class="acronym">
+                        APB
+                        <div class="meaning">All Points Bulletin</div>
+                    </div>
+                    <div class="acronym">
+                        ATF
+                        <div class="meaning">Bureau Alcohol Tobacco Firearms</div>
+                    </div>
+                    <div class="acronym">
+                        NRA
+                        <div class="meaning">National Rifle Association</div>
+                    </div>
+                    <div class="acronym">
+                        ESPN
+                        <div class="meaning">Entertainment Sports Network</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strofa 3 -->
+            <div class="verse">
+                <div class="verse-number">03</div>
+                <div class="verse-content">
+                    <div class="verse-label">Military & Education</div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        DMZ
+                        <div class="meaning">Demilitarized Zone</div>
+                    </div>
+                    <div class="acronym">
+                        MIA
+                        <div class="meaning">Missing In Action</div>
+                    </div>
+                    <div class="acronym">
+                        DOD
+                        <div class="meaning">Department of Defense</div>
+                    </div>
+                    <div class="acronym">
+                        ICBM
+                        <div class="meaning">Intercontinental Ballistic Missile</div>
+                    </div>
+                    <div class="acronym">
+                        NSA
+                        <div class="meaning">National Security Agency</div>
+                    </div>
+                    <div class="acronym">
+                        WMD
+                        <div class="meaning">Weapons Mass Destruction</div>
+                    </div>
+                    <div class="acronym">
+                        BBC
+                        <div class="meaning">British Broadcasting Corporation</div>
+                    </div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        GPA
+                        <div class="meaning">Grade Point Average</div>
+                    </div>
+                    <div class="acronym">
+                        SAT
+                        <div class="meaning">Scholastic Aptitude Test</div>
+                    </div>
+                    <div class="acronym">
+                        PTA
+                        <div class="meaning">Parent Teacher Association</div>
+                    </div>
+                    <div class="acronym">
+                        OCD
+                        <div class="meaning">Obsessive Compulsive Disorder</div>
+                    </div>
+                    <div class="acronym">
+                        ADD
+                        <div class="meaning">Attention Deficit Disorder</div>
+                    </div>
+                    <div class="acronym">
+                        PHD
+                        <div class="meaning">Doctor of Philosophy</div>
+                    </div>
+                    <div class="acronym">
+                        LLB
+                        <div class="meaning">Bachelor of Laws</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strofa 4 -->
+            <div class="verse">
+                <div class="verse-number">04</div>
+                <div class="verse-content">
+                    <div class="verse-label">Drugs & Technology</div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        DEA
+                        <div class="meaning">Drug Enforcement Administration</div>
+                    </div>
+                    <div class="acronym">
+                        THC
+                        <div class="meaning">Tetrahydrocannabinol</div>
+                    </div>
+                    <div class="acronym">
+                        PCP
+                        <div class="meaning">Phencyclidine</div>
+                    </div>
+                    <div class="acronym">
+                        INS
+                        <div class="meaning">Immigration Naturalization Service</div>
+                    </div>
+                    <div class="acronym">
+                        NSA
+                        <div class="meaning">National Security Agency</div>
+                    </div>
+                    <div class="acronym">
+                        NPR
+                        <div class="meaning">National Public Radio</div>
+                    </div>
+                    <div class="acronym">
+                        ACLU
+                        <div class="meaning">American Civil Liberties Union</div>
+                    </div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        MSN
+                        <div class="meaning">Microsoft Network</div>
+                    </div>
+                    <div class="acronym">
+                        ISP
+                        <div class="meaning">Internet Service Provider</div>
+                    </div>
+                    <div class="acronym">
+                        IBM
+                        <div class="meaning">International Business Machines</div>
+                    </div>
+                    <div class="acronym">
+                        AOL
+                        <div class="meaning">America Online</div>
+                    </div>
+                    <div class="acronym">
+                        FCC
+                        <div class="meaning">Federal Communications Commission</div>
+                    </div>
+                    <div class="acronym">
+                        SEC
+                        <div class="meaning">Securities Exchange Commission</div>
+                    </div>
+                    <div class="acronym">
+                        CNBC
+                        <div class="meaning">Consumer News Business Channel</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Strofa 5 -->
+            <div class="verse">
+                <div class="verse-number">05</div>
+                <div class="verse-content">
+                    <div class="verse-label">Sports & Health</div>
+                    <div class="acronym sos">
+                        SOS
+                        <div class="meaning"><br>Međunarodni Signal opasnosti</div>
+                    </div>
+                    <div class="acronym">
+                        NBA
+                        <div class="meaning">National Basketball Association</div>
+                    </div>
+                    <div class="acronym">
+                        NHL
+                        <div class="meaning">National Hockey League</div>
+                    </div>
+                    <div class="acronym">
+                        MLB
+                        <div class="meaning">Major League Baseball</div>
+                    </div>
+                    <div class="acronym">
+                        RBI
+                        <div class="meaning">Runs Batted In</div>
+                    </div>
+                    <div class="acronym">
+                        FDA
+                        <div class="meaning">Food Drug Administration</div>
+                    </div>
+                    <div class="acronym">
+                        CDC
+                        <div class="meaning">Centers Disease Control</div>
+                    </div>
+                    <div class="acronym">
+                        FBI
+                        <div class="meaning">Federal Bureau Investigation</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Zadnja strofa -->
+            <div class="final-verse">
+                <div class="final-sos">SOS</div>
+                <div class="final-sos">SOS</div>
+                <div class="final-sos">SOS</div>
+                <div class="final-sos">SOS</div>
+            </div>
+        </div>
+        
+        <div class="credit">Alen Nikolaus — Interpretacija teksta — 2025</div>
+    </div>
+</body>
+</html>
